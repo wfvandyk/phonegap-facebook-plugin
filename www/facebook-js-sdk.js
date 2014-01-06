@@ -5095,7 +5095,7 @@ FB.provide('', {
    * @param cb {Function} Optional callback function to handle the result. Not
    * all methods may have a response.
    */
-  ui: function(params, cb) {
+  ui: function(params, cb, cberror) {
     params = FB.copy({}, params);
     if (!params.method) {
       FB.log('"method" is a required parameter for FB.ui().');
@@ -5108,29 +5108,29 @@ FB.provide('', {
     if (FB._nativeInterface) {
         switch (params.method) {
             case 'auth.login':
-                FB._nativeInterface.login(params, cb, function(e) {alert('Cordova Facebook Connect plugin fail on login!' + e);});
-                break;
-            case 'permissions.request':
-                FB._nativeInterface.login(params, cb, function(e) {alert('Cordova Facebook Connect plugin fail on login!' + e);});
-                break;
-            case 'permissions.oauth':
-                FB._nativeInterface.login(params, cb, function(e) {alert('Cordova Facebook Connect plugin fail on login!' + e);});
-                break;
-            case 'auth.logout':
-                FB._nativeInterface.logout(cb, function(e) {alert('Cordova Facebook Connect plugin fail on logout!');});
-                break;
-            case 'auth.status':
-                FB._nativeInterface.getLoginStatus(cb, function(e) {alert('Cordova Facebook Connect plugin fail on auth.status!');});
-                break;
-            case 'login.status':
-                FB._nativeInterface.getLoginStatus(cb, function(e) {alert('Cordova Facebook Connect plugin fail on auth.status!');});
-                break;
-            case 'feed':
-                FB._nativeInterface.dialog(params, cb, function(e) {alert('Cordova Facebook Connect plugin fail on auth.status!');});
-                break;
-            case 'apprequests':
-                FB._nativeInterface.dialog(params, cb, function(e) {alert('Cordova Facebook Connect plugin fail on auth.status!');});
-            break;
+                    FB._nativeInterface.login(params, cb, cberror);
+                    break;
+                case 'permissions.request':
+                    FB._nativeInterface.login(params, cb, cberror);
+                    break;
+                case 'permissions.oauth':
+                    FB._nativeInterface.login(params, cb, cberror);
+                    break;
+                case 'auth.logout':
+                    FB._nativeInterface.logout(cb, cberror);
+                    break;
+                case 'auth.status':
+                    FB._nativeInterface.getLoginStatus(cb, cberror);
+                    break;
+                case 'login.status':
+                    FB._nativeInterface.getLoginStatus(cb, cberror);
+                    break;
+                case 'feed':
+                    FB._nativeInterface.dialog(params, cb, cberror);
+                    break;
+                case 'apprequests':
+                    FB._nativeInterface.dialog(params, cb, cberror);
+                    break;
         }
         return;
     }
@@ -6139,7 +6139,7 @@ FB.provide('', {
    *                          |         | [Extended permissions]
    *                          |         | (/docs/authentication/permissions).
    */
-  login: function(cb, opts) {
+  login: function(cb, cberror, opts) {
     if (opts && opts.perms && !opts.scope) {
       opts.scope = opts.perms;
       delete opts.perms;
@@ -6151,7 +6151,7 @@ FB.provide('', {
         display: 'popup',
         domain: location.hostname
       }, opts || {}),
-      cb);
+      cb, cberror);
   },
 
   /**
@@ -6170,8 +6170,8 @@ FB.provide('', {
    * @access public
    * @param cb {Function} The callback function.
    */
-  logout: function(cb) {
-    FB.ui({ method: 'auth.logout', display: 'hidden' }, cb);
+  logout: function(cb, cberror) {
+    FB.ui({ method: 'auth.logout', display: 'hidden' }, cberror);
   }
 });
 
